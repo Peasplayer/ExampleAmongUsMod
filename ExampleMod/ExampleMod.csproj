@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <VersionPrefix>1.0.0</VersionPrefix>
+        <VersionSuffix>dev</VersionSuffix>
+        <Description>ExampleMod</Description>
+        <Authors>Peasplayer</Authors>
+        <LangVersion>preview</LangVersion>
+
+        <GameVersion Condition="'$(GamePlatform)' == 'Steam'">2021.12.15</GameVersion>
+        <GameVersion Condition="'$(GamePlatform)' == 'Itch'">2021.12.15</GameVersion>
+    </PropertyGroup>
+
+    <Target Name="Copy" AfterTargets="Build">
+        <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFiles="$(AmongUs)/BepInEx/plugins/$(AssemblyName).dll" />
+    </Target>
+
+    <ItemGroup>
+        <!-- This next part adds all the dependecies for the mod. Be sure to update them -->
+        <PackageReference Include="PeasAPI" Version="1.8.1-release" />
+        <PackageReference Include="Reactor" Version="1.1.0" />
+        <PackageReference Include="BepInEx.IL2CPP.MSBuild" Version="1.0.2" PrivateAssets="all" />
+        <PackageReference Include="BepInEx.IL2CPP" Version="6.0.0-be.549" />
+        <PackageReference Include="AmongUs.GameLibs.$(GamePlatform)" Version="$(GameVersion)" PrivateAssets="all" />
+        
+        <!-- This next part adds all the files from the "Resources" folder so they can be used in the mod -->
+        <EmbeddedResource Include="Resources\*" />
+    </ItemGroup>
+</Project>
+
